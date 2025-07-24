@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şikayet Oluştur - Trendyol Şikayet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Genel Stiller */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navbar Stilleri */
+        nav {
+            background-color: #000;
+            border-bottom: 1px solid #FF6B00;
+            height: 90px;
+            position: relative;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 110px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            color: #FF6B00;
+            font-size: 24px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: #FF6B00;
+        }
+        
+        .nav-links a.active {
+            color: #FF6B00;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #FF6B00;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        .btn {
+            background-color: #FF6B00;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn:hover {
+            background-color: #ff8c33;
+            color: #000;
+            transform: translateY(-2px);
+        }
+        
+        /* Hamburger Menü */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+        
+        .hamburger .line {
+            width: 30px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        /* Mobil Menü */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .hamburger.active .line:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            
+            .hamburger.active .line:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active .line:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 90px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 90px);
+                background-color: #000;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: left 0.5s ease;
+                z-index: 1000;
+                border-top: 1px solid #FF6B00;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 20px 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Şikayet Formu */
+        .complaint-section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #FF6B00;
+            font-size: 2.5rem;
+        }
+        
+        .complaint-form {
+            background-color: #111;
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #FF6B00;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #222;
+            border: 1px solid #333;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #FF6B00;
+        }
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .file-upload {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .file-upload input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background-color: #222;
+            border: 2px dashed #444;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload-label:hover {
+            border-color: #FF6B00;
+        }
+        
+        .file-upload-icon {
+            margin-right: 10px;
+            color: #FF6B00;
+            font-size: 1.2rem;
+        }
+        
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+            display: none;
+        }
+        
+        .submit-btn {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .submit-btn .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+        }
+        
+        /* Responsive Tasarım */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .complaint-form {
+                padding: 20px;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="container navbar">
+            <div class="logo">
+                <img src="img/logotrndyl.png" alt="Trendyol Logo">
+      
+            </div>
+            
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Anasayfa</a></li>
+                <li><a href="#" class="active">Şikayet Oluştur</a></li>
+                <li><a href="#">Şikayetler</a></li>
+                <li><a href="#">Giriş/Kayıt</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Şikayet Formu -->
+    <section class="complaint-section">
+        <div class="container">
+            <h2 class="section-title">Şikayet Oluştur</h2>
+            <form id="complaintForm" class="complaint-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Ad Soyad</label>
+                        <input type="text" id="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-posta</label>
+                        <input type="email" id="email" class="form-control" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="orderNumber">Sipariş Numarası</label>
+                        <input type="text" id="orderNumber" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="category">Şikayet Kategorisi</label>
+                        <select id="category" class="form-control" required>
+                            <option value="">Seçiniz</option>
+                            <option value="delivery">Teslimat Problemi</option>
+                            <option value="product">Ürün Problemi</option>
+                            <option value="payment">Ödeme Problemi</option>
+                            <option value="service">Müşteri Hizmetleri</option>
+                            <option value="other">Diğer</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="subject">Konu</label>
+                    <input type="text" id="subject" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Şikayet Detayı</label>
+                    <textarea id="description" class="form-control" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Dosya Ekle (Resim, Fatura vb.)</label>
+                    <div class="file-upload">
+                        <input type="file" id="fileUpload" accept="image/*,.pdf,.doc,.docx">
+                        <label for="fileUpload" class="file-upload-label">
+                            <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
+                            <span>Dosya Seçin veya Sürükleyip Bırakın</span>
+                        </label>
+                        <div id="fileName" class="file-name"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="terms" required> 
+                        <a href="#" style="color: #FF6B00;">Kullanım koşullarını</a> okudum ve kabul ediyorum
+                    </label>
+                </div>
+                
+                <div class="submit-btn">
+                    <button type="submit" class="btn">Şikayeti Gönder</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    
+    <script>
+        // Hamburger menü toggle fonksiyonu
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+        
+        // Dosya yükleme işlemi
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const fileNameDiv = document.getElementById('fileName');
+            if (this.files.length > 0) {
+                fileNameDiv.textContent = `Seçilen dosya: ${this.files[0].name}`;
+                fileNameDiv.style.display = 'block';
+            } else {
+                fileNameDiv.style.display = 'none';
+            }
+        });
+        
+        // Form gönderim işlemi
+        document.getElementById('complaintForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Burada gerçek bir form gönderim işlemi yapılabilir
+            // Şimdilik sadece başarılı mesajı gösteriyoruz
+            
+            alert('Şikayetiniz başarıyla gönderildi! En kısa sürede dönüş yapılacaktır.');
+            this.reset();
+            document.getElementById('fileName').style.display = 'none';
+        });
+    </script>
+</body>
+</html>

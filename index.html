@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trendyol Şikayet - Müşteri Şikayet Platformu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Genel Stiller */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Navbar Stilleri */
+        nav {
+            background-color: #000;
+            border-bottom: 1px solid #FF6B00;
+            height: 90px;
+            position: relative;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 90px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 110px;
+            margin-right: 10px;
+        }
+        
+        .logo h1 {
+            color: #FF6B00;
+            font-size: 24px;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 30px;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: #FF6B00;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #FF6B00;
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .btn {
+            background-color: #FF6B00;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #ff8c33;
+            color: #000;
+            transform: translateY(-2px);
+        }
+        
+        /* Hamburger Menü */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            padding: 10px;
+        }
+        
+        .hamburger .line {
+            width: 30px;
+            height: 3px;
+            background-color: #fff;
+            margin: 5px 0;
+            transition: all 0.3s ease;
+        }
+        
+        /* Mobil Menü */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+                z-index: 1001;
+            }
+            
+            .hamburger.active .line:nth-child(1) {
+                transform: translateY(8px) rotate(45deg);
+            }
+            
+            .hamburger.active .line:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .hamburger.active .line:nth-child(3) {
+                transform: translateY(-8px) rotate(-45deg);
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 90px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 90px);
+                background-color: #000;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                transition: left 0.5s ease;
+                z-index: 1000;
+                border-top: 1px solid #FF6B00;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 20px 0;
+            }
+            
+            .nav-links a {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Hero Bölümü */
+        .hero {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            width: 60%;
+            z-index: 2;
+        }
+        
+        .hero h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.5s;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 0.8s;
+            color: #ccc;
+        }
+        
+        .hero-btn {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 1s forwards 1.1s;
+        }
+        
+        .hero-btn .btn {
+            font-size: 1.1rem;
+            padding: 15px 30px;
+        }
+        
+        /* Animasyonlar */
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* İstatistikler Bölümü */
+        .stats {
+            padding: 80px 0;
+            background-color: #111;
+        }
+        
+        .stats-title {
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 2.5rem;
+            color: #FF6B00;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+        
+        .stat-box {
+            text-align: center;
+            padding: 30px;
+            width: 200px;
+            margin: 10px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            border-top: 3px solid #FF6B00;
+            transition: transform 0.3s;
+        }
+        
+        .stat-box:hover {
+            transform: translateY(-10px);
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: #FF6B00;
+            margin-bottom: 15px;
+        }
+        
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #FF6B00;
+        }
+        
+        .stat-text {
+            color: #ccc;
+            font-size: 1rem;
+        }
+        
+        /* Floating Animasyonları */
+        .floating {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        .floating:nth-child(1) {
+            top: 10%;
+            right: 10%;
+            font-size: 10rem;
+            color: #FF6B00;
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .floating:nth-child(2) {
+            top: 60%;
+            right: 20%;
+            font-size: 8rem;
+            color: #FF6B00;
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .floating:nth-child(3) {
+            top: 30%;
+            right: 30%;
+            font-size: 6rem;
+            color: #FF6B00;
+            animation: float 12s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+        
+        /* Responsive Tasarım */
+        @media (max-width: 768px) {
+            .hero-content {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .hero h2 {
+                font-size: 2.5rem;
+            }
+            
+            .stats-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-box {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="container navbar">
+            <div class="logo">
+                <img src="img/logotrndyl.png" alt="Trendyol Logo">
+           
+            </div>
+            
+            <div class="hamburger">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#">Anasayfa</a></li>
+                <li><a href="#">Şikayet Oluştur</a></li>
+                <li><a href="#">Şikayetler</a></li>
+                <li><a href="#">Giriş/Kayıt</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Hero Bölümü -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Trendyol Deneyiminizi Bizimle Paylaşın</h2>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nam molestias inventore consequatur dolor sint, sed, dolores 
+                    </p>
+                <div class="hero-btn">
+                    <a href="sikayet-olustur.html" class="btn">Şikayet Oluştur</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Floating Animasyonları -->
+        <div class="floating">
+            <i class="fas fa-comment-alt"></i>
+        </div>
+        <div class="floating">
+            <i class="fas fa-headset"></i>
+        </div>
+        <div class="floating">
+            <i class="fas fa-thumbs-up"></i>
+        </div>
+    </section>
+    
+    <!-- İstatistikler Bölümü -->
+    <section class="stats">
+        <div class="container">
+            <h2 class="stats-title">Platform İstatistikleri</h2>
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="userCount">12,458</div>
+                    <div class="stat-text">Toplam Kullanıcı</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="stat-number" id="complaintCount">8,742</div>
+                    <div class="stat-text">Toplam Şikayet</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-number" id="solvedCount">6,915</div>
+                    <div class="stat-text">Çözülen Şikayet</div>
+                </div>
+               
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // İstatistikler için basit bir artış animasyonu
+        function animateValue(id, start, end, duration) {
+            let obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                let value;
+                if (id === "responseTime") {
+                    value = Math.floor(progress * (end - start) + start);
+                } else {
+                    value = Math.floor(progress * (end - start) + start).toLocaleString();
+                }
+                obj.innerHTML = value;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Hamburger menü toggle fonksiyonu
+        const hamburger = document.querySelector('.hamburger');
+        const navLinks = document.querySelector('.nav-links');
+        
+        hamburger.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+        
+        // Sayfa yüklendiğinde animasyonları başlat
+        window.onload = function() {
+            animateValue("userCount", 0, 12458, 2000);
+            animateValue("complaintCount", 0, 8742, 2000);
+            animateValue("solvedCount", 0, 6915, 2000);
+        };
+    </script>
+</body>
+</html>
